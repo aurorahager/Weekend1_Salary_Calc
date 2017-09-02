@@ -7,7 +7,8 @@ var empArray = [];
 $(document).ready(onReady);
 
 function onReady () {
-    $('#addButton').on('click', createEmp);      
+    $('#addButton').on('click', createEmp); 
+    $('#calcButton').on('click', salCalc);
 }//END onReady function
 
 // function that creates new obj from user input
@@ -34,19 +35,18 @@ function Employee (fName, lName, id, job, sal) {
 }//END constructor
 
 //TEST obj
-new Employee ('f','f','22','f', 12);
-new Employee('r', 'r', '21', 'r', 10);
+new Employee ('f','f','22','f', '14');
+new Employee('r', 'r', '21', 'r', '10');
 
 //function to calculate salary
  function salCalc () {
-     var totalSal = 1;
-     // loop through employees     
+     console.log('calc click!');
+  var totalSal = 0;
+     //loop through employees 
+    for ( var i = 0; i < empArray.length; i++) {
+        totalSal += parseInt(empArray[i].annualSalary);
      }//END for loop
-    // return totalSal
+    $('#cost').append('<p> Cost: $' + totalSal + '</p>');
  }//END salCalc function
-salCalc(empArray);
+//    //salCalc(empArray);
  
- 
- 
-
-
