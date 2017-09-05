@@ -2,6 +2,7 @@
 
 // Array to store added employees 
 var empArray = [];
+  var totalSal = 0;
 
 //JQuery
 $(document).ready(onReady);
@@ -9,6 +10,10 @@ $(document).ready(onReady);
 function onReady () {
     $('#addButton').on('click', createEmp); 
     $('#addButton').on('click', salCalc);
+    $('#searchButton').on('click', search);
+    $('#searchButton').on('click', reset);
+    $('#delButton').on('click', deleteEmp);
+    $('#delButton').on('click', reset);
 }//END onReady function
 
 // function that creates new obj from user input
@@ -22,6 +27,27 @@ function createEmp() {
     $('#annSal').val('');  
 }//END createEmp function
 
+// Function on delete click deletes employee and updates total
+ function deleteEmp(salTotal) { 
+     var salTotal = totalSal;
+        
+         var nameF = $('#searchFirst').val();
+         var nameL = $('#searchLast').val();
+         var id = $('#searchId').val();
+     //remove employee from dom
+     $('#searchResults').remove();
+     //Loops through employees finds match
+     for (var i = 0; i < empArray.length; i++) {
+         if (empArray[i].firstName === nameF && empArray[i].lastName === nameL && empArray[i].idNumber === id) {
+             empArray[i].pop();
+             
+         }
+         salTotal -= Number(empArray[i].annualSalary);
+        }
+        var monthlySal = salTotal / 12;
+        $('#cost').replaceWith('<p id="cost"> Cost: $' + monthlySal + '</p>');
+ }//END deleteEmp
+
 // employee constructor function
 function Employee (fName, lName, id, job, sal) {
     this.firstName = fName;
@@ -34,14 +60,39 @@ function Employee (fName, lName, id, job, sal) {
 }//END constructor
 
 //function to calculate salary
- function salCalc () {
-  var totalSal = 0;
+function salCalc () {
      //loop through employees 
     for ( var i = 0; i < empArray.length; i++) {
-        totalSal += parseInt(empArray[i].annualSalary);
+        totalSal += Number(empArray[i].annualSalary);
      }//END for loop
      var monthlySal = totalSal / 12;
      // append monthly salary to DOM
-    $('#cost').append('<p> Cost: $' + monthlySal + '</p>');
+    $('#cost').replaceWith('<p id="cost"> Cost: $' + monthlySal + '</p>');
  }//END salCalc function
  
+ function search() {
+     console.log('search click!');
+     //Local variables. User input
+     var nameF = $('#searchFirst').val();
+     var nameL = $('#searchLast').val();
+     var id = $('#searchId').val();
+     //Loop through employees find matches
+     for (var i = 0; i < empArray.length; i++) {
+         if (empArray[i].firstName === nameF && empArray[i].lastName === nameL && empArray[i].idNumber === id) {
+            // add matches to DOM
+            $('#searchResults').replaceWith('<p id= "searchResults"><strong>Employee Name: </strong>' + empArray[i].firstName + ' ' + empArray[i].lastName + '<strong> Job Title:</strong> ' + empArray[i].jobTitle + ' </p>');
+         } //END match if
+     } //END for loop
+     
+     //return empMatch;
+ }; //END search
+ function reset() {
+             $("#searchFirst").val(' ');
+             $('#searchLast').val(' ');
+             $('#searchId').val(' ');
+ }
+
+ deleteEmp(totalSal);
+
+
+
